@@ -220,7 +220,7 @@ class VMoreStepView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : VMoreStepView {
             val view : VMoreStepView = VMoreStepView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
