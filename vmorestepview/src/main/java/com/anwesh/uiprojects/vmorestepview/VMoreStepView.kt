@@ -26,4 +26,35 @@ fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.inverse()
-fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap 
+fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
+fun Int.sfi() : Float = 1f - 2 * (this % 2)
+fun Int.sf() : Float = 1f - 2 * this
+
+fun Canvas.drawVMSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = h / (nodes + 1)
+    val size : Float = gap / sizeFactor
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val yGap : Float = (2 * size) / lines
+    paint.color = foreColor
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.strokeCap = Paint.Cap.ROUND
+    save()
+    translate(w / 2, gap * (i + 1))
+    rotate(90f * i.sfi() * sc2)
+    for (j in 0..(lines - 1)) {
+        val jSize : Float = (lines - j) * yGap
+        save()
+        translate(0f, -size + j * yGap)
+        for (k in 0..1) {
+            save()
+            rotate(45f * k.sf() * sc1.divideScale(j, lines))
+            drawLine(0f, 0f, 0f, jSize, paint)
+            restore()
+        }
+        restore()
+    }
+    restore()
+}
