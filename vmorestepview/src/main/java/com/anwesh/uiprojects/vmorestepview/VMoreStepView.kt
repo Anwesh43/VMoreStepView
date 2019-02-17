@@ -191,4 +191,26 @@ class VMoreStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : VMoreStepView) {
+
+        private val animator : Animator = Animator(view)
+        private val vms : VMoreStep = VMoreStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            vms.draw(canvas, paint)
+            animator.animate {
+                vms.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            vms.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
