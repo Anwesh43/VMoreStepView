@@ -214,4 +214,13 @@ class VMoreStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : VMoreStepView {
+            val view : VMoreStepView = VMoreStepView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
